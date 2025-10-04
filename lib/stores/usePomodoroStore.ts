@@ -14,6 +14,9 @@ interface PomodoroStore extends PomodoroState {
   updateConfig: (config: Partial<PomodoroConfig>) => void
   getTodaySessions: () => PomodoroSession[]
   getTotalFocusTime: () => number
+  // Estadísticas
+  completedSessions: PomodoroSession[]
+  totalTime: number
 }
 
 const DEFAULT_CONFIG: PomodoroConfig = {
@@ -167,6 +170,18 @@ export const usePomodoroStore = create<PomodoroStore>()(
             const duration = new Date(session.endedAt).getTime() - new Date(session.startedAt).getTime()
             return total + duration
           }, 0)
+      },
+
+      // Getters para estadísticas
+      get completedSessions() {
+        return get().sessions.filter(session => session.completed)
+      },
+
+      get totalTime() {
+        return get().completedSessions.reduce((total, session) => {
+          const duration = new Date(session.endedAt).getTime() - new Date(session.startedAt).getTime()
+          return total + duration
+        }, 0)
       },
     }),
     {

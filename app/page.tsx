@@ -5,8 +5,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { PomodoroPanel } from "./pomodoro/PomodoroPanel"
 import { KanbanBoard } from "./kanban/KanbanBoard"
 import { CalendarPanel } from "./calendar/CalendarPanel"
+import { StatsPanel } from "./stats/StatsPanel"
 import { SearchBar } from "@/components/SearchBar"
-import { Timer, LayoutGrid, Calendar } from "lucide-react"
+import { Timer, LayoutGrid, Calendar, BarChart3 } from "lucide-react"
 
 export default function Page() {
   const [activeTab, setActiveTab] = useState("pomodoro")
@@ -31,7 +32,7 @@ export default function Page() {
 
         {/* Main Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6 bg-gray-800/50 shadow-lg border border-gray-700/50">
+          <TabsList className="grid w-full grid-cols-4 mb-6 bg-gray-800/50 shadow-lg border border-gray-700/50">
             <TabsTrigger value="pomodoro" className="gap-2 data-[state=active]:bg-gray-700/80 data-[state=active]:text-white data-[state=active]:border-gray-500 data-[state=active]:shadow-lg text-gray-300 hover:text-white hover:bg-gray-700/40">
               <Timer className="h-4 w-4" />
               <span className="hidden sm:inline">Pomodoro</span>
@@ -43,6 +44,10 @@ export default function Page() {
             <TabsTrigger value="calendar" className="gap-2 data-[state=active]:bg-gray-700/80 data-[state=active]:text-white data-[state=active]:border-gray-500 data-[state=active]:shadow-lg text-gray-300 hover:text-white hover:bg-gray-700/40">
               <Calendar className="h-4 w-4" />
               <span className="hidden sm:inline">Calendario</span>
+            </TabsTrigger>
+            <TabsTrigger value="stats" className="gap-2 data-[state=active]:bg-gray-700/80 data-[state=active]:text-white data-[state=active]:border-gray-500 data-[state=active]:shadow-lg text-gray-300 hover:text-white hover:bg-gray-700/40">
+              <BarChart3 className="h-4 w-4" />
+              <span className="hidden sm:inline">Estadísticas</span>
             </TabsTrigger>
           </TabsList>
 
@@ -56,6 +61,10 @@ export default function Page() {
 
           <TabsContent value="calendar" className="mt-0">
             <CalendarPanel />
+          </TabsContent>
+
+          <TabsContent value="stats" className="mt-0">
+            <StatsPanel />
           </TabsContent>
         </Tabs>
 
