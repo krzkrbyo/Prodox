@@ -1,6 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
+import { AuthProvider } from "@/components/providers/session-provider"
 import "./globals.css"
 
 const geistSans = Geist({
@@ -14,7 +15,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "FocusBoard - Productividad Inteligente",
+  title: "Prodox - Productividad Inteligente",
   description: "Gestiona tu tiempo con Pomodoro, Kanban y Calendario integrados",
     generator: 'v0.app'
 }
@@ -26,7 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${geistSans.variable} ${geistMono.variable} dark`}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   )
 }
