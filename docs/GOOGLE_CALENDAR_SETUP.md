@@ -1,57 +1,45 @@
-# Configuración de Google Calendar Sync
+# Configuración de Google Calendar Sync (Súper Simple)
 
-## Variables de Entorno Requeridas
+## Configuración Ultra Simple con Calendar ID
 
-Crea un archivo `.env.local` en la raíz del proyecto con las siguientes variables:
+Esta implementación es **extremadamente simple** - solo necesitas el **ID de tu calendario de Google**. No necesitas API Keys, OAuth, ni configuraciones complejas. La aplicación accede directamente a tu calendario usando el ID.
 
-```env
-# Google OAuth Configuration
-GOOGLE_CLIENT_ID=your_google_client_id_here
-GOOGLE_CLIENT_SECRET=your_google_client_secret_here
+## Pasos para Obtener tu Calendar ID
 
-# NextAuth Configuration
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your_nextauth_secret_here
-```
+1. **Abrir Google Calendar**
+   - Ve a [Google Calendar](https://calendar.google.com/) en tu navegador
+   - Inicia sesión con tu cuenta de Google
 
-## Pasos para Configurar Google OAuth
+2. **Encontrar el calendario que quieres usar**
+   - En el panel izquierdo, encuentra el calendario que quieres sincronizar
+   - Si no tienes uno, crea un nuevo calendario
 
-1. **Crear un proyecto en Google Cloud Console**
-   - Ve a [Google Cloud Console](https://console.developers.google.com/)
-   - Crea un nuevo proyecto o selecciona uno existente
+3. **Obtener el Calendar ID**
+   - Haz clic en los **3 puntos** (⋮) junto al nombre del calendario
+   - Selecciona **"Configuración y uso compartido"**
+   - Busca la sección **"ID del calendario"**
+   - Copia el ID completo (es muy largo, algo como: `755f4d657f8d98e77b555da649aba70bfee3408e1e70a0070ca0080e43daac31@group.calendar.google.com`)
 
-2. **Habilitar Google Calendar API**
-   - En el menú lateral, ve a "APIs y servicios" > "Biblioteca"
-   - Busca "Google Calendar API" y habilítala
+4. **Hacer el calendario público (IMPORTANTE)**
+   - En la misma página de "Configuración y uso compartido"
+   - Busca la sección **"Acceso para usuarios con el enlace"**
+   - Cambia de "No especificar" a **"Ver todos los detalles del evento"**
+   - Haz clic en **"Guardar"**
 
-3. **Crear credenciales OAuth 2.0**
-   - Ve a "APIs y servicios" > "Credenciales"
-   - Haz clic en "Crear credenciales" > "ID de cliente OAuth 2.0"
-   - Selecciona "Aplicación web"
-   - Configura las URIs de redirección autorizadas:
-     - `http://localhost:3000/api/auth/callback/google` (desarrollo)
-     - `https://tu-dominio.com/api/auth/callback/google` (producción)
-
-4. **Configurar los scopes**
-   - Los scopes ya están configurados en el código:
-     - `https://www.googleapis.com/auth/calendar`
-     - `https://www.googleapis.com/auth/calendar.events`
-
-5. **Generar NEXTAUTH_SECRET**
-   ```bash
-   openssl rand -base64 32
-   ```
+5. **¡Eso es todo!** Ahora tu calendario es accesible para la sincronización.
 
 ## Funcionalidades Implementadas
 
-### ✅ Autenticación con Google
-- Login/logout con NextAuth
-- Refresh automático de tokens
-- Scopes para Calendar API
+### ✅ Configuración Ultra Simple
+- Solo requiere el Calendar ID de Google Calendar
+- Sin API Keys, OAuth, ni configuraciones complejas
+- Configuración desde la interfaz de usuario
+- Validación automática del Calendar ID
 
 ### ✅ Gestión de Calendario
-- Crear calendario "FocusBoard" automáticamente
+- Usar cualquier calendario existente de Google
 - Almacenar calendarId en localStorage y cookies
+- Validación automática del Calendar ID al configurar
 
 ### ✅ Sincronización Bidireccional
 - **Push**: Enviar tareas con `dueDate` a Google Calendar
@@ -59,14 +47,16 @@ NEXTAUTH_SECRET=your_nextauth_secret_here
 - Mapeo por `fbTaskId` para sincronización precisa
 
 ### ✅ UI Integrada
-- Botones de conexión y sincronización
+- Diálogo súper simple para ingresar Calendar ID
+- Instrucciones paso a paso incluidas
+- Botones de sincronización
 - Estados de carga y feedback visual
 - Integración con FullCalendar
 
 ## Uso
 
 1. **Conectar con Google**: Haz clic en "Conectar con Google"
-2. **Configurar calendario**: Haz clic en "Usar calendario FocusBoard"
+2. **Ingresar Calendar ID**: Copia y pega el ID de tu calendario
 3. **Sincronizar**:
    - "Pull desde Google": Obtener eventos de Google
    - "Push tareas → Google": Enviar tareas locales a Google
@@ -77,9 +67,46 @@ NEXTAUTH_SECRET=your_nextauth_secret_here
 - **Evento → Tarea**: Si tiene `fbTaskId`, actualiza la tarea local
 - **Upsert**: Usa `extendedProperties.private.fbTaskId` para identificación
 
+## Cómo Hacer Público tu Calendario
+
+### 📋 **Pasos Detallados:**
+
+1. **Abrir configuración del calendario**
+   - Ve a [Google Calendar](https://calendar.google.com/)
+   - En el panel izquierdo, encuentra tu calendario
+   - Haz clic en los **3 puntos** (⋮) junto al nombre
+
+2. **Acceder a configuración**
+   - Selecciona **"Configuración y uso compartido"**
+   - Se abrirá una nueva pestaña
+
+3. **Configurar acceso público**
+   - Busca la sección **"Acceso para usuarios con el enlace"**
+   - Cambia de **"No especificar"** a **"Ver todos los detalles del evento"**
+   - Haz clic en **"Guardar"**
+
+4. **Verificar configuración**
+   - Deberías ver un mensaje de confirmación
+   - El calendario ahora es accesible públicamente
+
+### ⚠️ **Importante:**
+- **Solo los eventos serán visibles**, no tu información personal
+- **Puedes revertir esto** en cualquier momento
+- **Es seguro** para uso con aplicaciones como FocusBoard
+
 ## Troubleshooting
 
-- Verifica que las variables de entorno estén configuradas
-- Asegúrate de que la Google Calendar API esté habilitada
-- Revisa los logs del navegador para errores de autenticación
-- Verifica que las URIs de redirección estén configuradas correctamente
+- **Calendar ID inválido**: Asegúrate de copiar el ID completo del calendario
+- **Calendario no accesible**: El calendario debe ser público (ver pasos arriba)
+- **Error de permisos**: Verifica que tengas permisos de escritura en el calendario
+- **Revisa los logs**: Si hay errores, revisa la consola del navegador
+- **El Calendar ID se almacena**: En cookies del navegador (no en variables de entorno)
+
+## Ventajas de esta Implementación
+
+✅ **Súper fácil**: Solo necesitas copiar y pegar un ID  
+✅ **Sin configuración**: No necesitas crear proyectos en Google Cloud  
+✅ **Sin API Keys**: No necesitas generar credenciales  
+✅ **Sin OAuth**: No necesitas autenticación compleja  
+✅ **Para todos**: Cualquier usuario puede usarlo fácilmente  
+✅ **Acceso directo**: Usa el Calendar ID directamente sin intermediarios

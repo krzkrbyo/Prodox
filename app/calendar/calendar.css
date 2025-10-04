@@ -1,0 +1,156 @@
+/* Estilos personalizados para mejorar la legibilidad del calendario */
+
+.calendar-container {
+  /* Mejorar contraste general */
+  --fc-border-color: #374151;
+  --fc-button-bg-color: #4b5563;
+  --fc-button-border-color: #6b7280;
+  --fc-button-hover-bg-color: #6b7280;
+  --fc-button-hover-border-color: #9ca3af;
+  --fc-button-active-bg-color: #6b7280;
+  --fc-button-active-border-color: #9ca3af;
+  --fc-today-bg-color: #1f2937;
+  --fc-neutral-bg-color: #111827;
+  --fc-list-event-hover-bg-color: #374151;
+}
+
+/* Encabezados de días más legibles */
+.fc-col-header-cell {
+  background-color: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+.fc-col-header-cell-cushion {
+  color: #f9fafb !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Título del mes más legible */
+.fc-toolbar-title {
+  color: #f9fafb !important;
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+}
+
+/* Botones de navegación más visibles */
+.fc-button {
+  background-color: #4b5563 !important;
+  border-color: #6b7280 !important;
+  color: #f9fafb !important;
+  font-weight: 500 !important;
+  border-radius: 0.375rem !important;
+  padding: 0.5rem 1rem !important;
+  transition: all 0.2s !important;
+}
+
+.fc-button:hover {
+  background-color: #6b7280 !important;
+  border-color: #9ca3af !important;
+  color: #ffffff !important;
+}
+
+.fc-button:focus {
+  box-shadow: 0 0 0 2px #3b82f6 !important;
+}
+
+.fc-button:disabled {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+  color: #9ca3af !important;
+}
+
+/* Celdas de días más legibles */
+.fc-daygrid-day {
+  background-color: #111827 !important;
+  border-color: #374151 !important;
+}
+
+.fc-daygrid-day-number {
+  color: #f9fafb !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+  padding: 0.5rem !important;
+}
+
+/* Día actual más visible */
+.fc-today-custom {
+  background-color: #1e40af !important;
+}
+
+.fc-today-custom .fc-daygrid-day-number {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* Días de otros meses más sutiles */
+.fc-other-month-custom {
+  background-color: #0f172a !important;
+}
+
+.fc-other-month-custom .fc-daygrid-day-number {
+  color: #6b7280 !important;
+  opacity: 0.6 !important;
+}
+
+/* Eventos más legibles */
+.fc-event-custom {
+  border-radius: 0.375rem !important;
+  border: none !important;
+  font-weight: 500 !important;
+  font-size: 0.75rem !important;
+  padding: 0.25rem 0.5rem !important;
+  margin: 0.125rem !important;
+}
+
+.fc-event-custom .fc-event-title {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+/* Eventos de Google Calendar */
+.fc-google-event {
+  background-color: #3b82f6 !important;
+  border-left: 3px solid #1d4ed8 !important;
+}
+
+.fc-google-event .fc-event-title {
+  color: #ffffff !important;
+}
+
+/* Hover en eventos */
+.fc-event-custom:hover {
+  opacity: 0.9 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Mejorar contraste en selección */
+.fc-daygrid-day.fc-day-today {
+  background-color: #1e40af !important;
+}
+
+.fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* Scrollbar personalizado */
+.calendar-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.calendar-container::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+.calendar-container::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 4px;
+}
+
+.calendar-container::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}

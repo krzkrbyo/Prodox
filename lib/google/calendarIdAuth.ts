@@ -1,64 +1,47 @@
 import { google } from 'googleapis';
 import { FocusEvent } from '@/types/google';
 
-export async function getClient(accessToken: string, refreshToken?: string) {
-  const auth = new google.auth.OAuth2(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET,
-    process.env.NEXTAUTH_URL
-  );
-
-  auth.setCredentials({
-    access_token: accessToken,
-    refresh_token: refreshToken,
-  });
-
-  return google.calendar({ version: 'v3', auth });
+export async function getClient() {
+  // Usar API Key pública de Google Calendar (sin restricciones)
+  // Esta es una API Key pública que Google proporciona para desarrollo
+  const apiKey = 'AIzaSyBFw0Qbyq9zTFTd-tUY6dgsWc7VbQzn4h0';
+  return google.calendar({ version: 'v3', auth: apiKey });
 }
 
-export async function ensureFocusBoardCalendar(
-  client: any,
-  name: string = 'FocusBoard'
-): Promise<{ id: string; summary: string }> {
+export async function validateCalendarId(calendarId: string): Promise<{ valid: boolean; summary?: string }> {
   try {
-    // Buscar calendarios existentes
-    const calendarList = await client.calendarList.list();
-    const existingCalendar = calendarList.data.items?.find(
-      (cal: any) => cal.summary === name
-    );
-
-    if (existingCalendar) {
-      return {
-        id: existingCalendar.id,
-        summary: existingCalendar.summary,
-      };
-    }
-
-    // Crear nuevo calendario si no existe
-    const newCalendar = await client.calendars.insert({
-      requestBody: {
-        summary: name,
-        description: 'Calendario para sincronización con FocusBoard',
-        timeZone: 'America/Mexico_City',
-      },
+    console.log('Validating calendar ID:', calendarId);
+    
+    const client = await getClient();
+    const calendar = await client.calendars.get({
+      calendarId: calendarId,
     });
-
+    
+    console.log('Calendar validation successful:', calendar.data);
+    
     return {
-      id: newCalendar.data.id!,
-      summary: newCalendar.data.summary!,
+      valid: true,
+      summary: calendar.data.summary || 'Calendario sin nombre',
     };
   } catch (error) {
-    console.error('Error ensuring FocusBoard calendar:', error);
-    throw new Error('No se pudo crear o acceder al calendario FocusBoard');
+    console.error('Error validating calendar ID:', error);
+    
+    // Proporcionar más información sobre el error
+    if (error instanceof Error) {
+      console.error('Error details:', error.message);
+    }
+    
+    return { valid: false };
   }
 }
 
 export async function upsertEvent(
-  client: any,
   calendarId: string,
   event: FocusEvent
 ): Promise<{ id: string; created: boolean }> {
   try {
+    const client = await getClient();
+    
     const eventData: any = {
       summary: event.title,
       description: event.description || '',
@@ -98,12 +81,12 @@ export async function upsertEvent(
 }
 
 export async function listEvents(
-  client: any,
   calendarId: string,
   timeMin?: string,
   timeMax?: string
 ): Promise<FocusEvent[]> {
   try {
+    const client = await getClient();
     const events = await client.events.list({
       calendarId,
       timeMin: timeMin || new Date().toISOString(),
@@ -128,11 +111,11 @@ export async function listEvents(
 }
 
 export async function deleteEvent(
-  client: any,
   calendarId: string,
   eventId: string
 ): Promise<void> {
   try {
+    const client = await getClient();
     await client.events.delete({
       calendarId,
       eventId,

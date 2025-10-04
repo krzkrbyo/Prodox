@@ -1,30 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { getClient, upsertEvent } from '@/lib/google/googleCalendar';
+import { upsertEvent } from '@/lib/google/directCalendar';
 import { FocusEvent, CalendarOperationResult } from '@/types/google';
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    
-    if (!session?.accessToken) {
+    const calendarId = request.cookies.get('google_calendar_id')?.value;
+    const { events } = await request.json();
+
+    if (!calendarId) {
       return NextResponse.json(
-        { error: 'No autenticado' },
+        { error: 'No hay Calendar ID configurado' },
         { status: 401 }
       );
     }
 
-    const { calendarId, events } = await request.json();
-
-    if (!calendarId || !Array.isArray(events)) {
+    if (!Array.isArray(events)) {
       return NextResponse.json(
-        { error: 'calendarId y events son requeridos' },
+        { error: 'events es requerido y debe ser un array' },
         { status: 400 }
       );
     }
-
-    const client = await getClient(session.accessToken as string, session.refreshToken as string);
     
     const result: CalendarOperationResult = {
       created: 0,
@@ -34,7 +29,7 @@ export async function POST(request: NextRequest) {
 
     for (const event of events as FocusEvent[]) {
       try {
-        const { created } = await upsertEvent(client, calendarId, event);
+        const { created } = await upsertEvent(calendarId, event);
         if (created) {
           result.created++;
         } else {
